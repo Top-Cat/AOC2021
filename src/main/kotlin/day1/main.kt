@@ -1,5 +1,7 @@
 package day1
 
+import readInput
+
 fun main() {
     Main().also {
         println(it.partOne())
@@ -8,8 +10,7 @@ fun main() {
 }
 
 class Main {
-    private val text = this::class.java.getResource("/1.txt")?.readText() ?: ""
-    private val input = text.split("\n").map { it.toIntOrNull() ?: 0 }
+    private val input = readInput(1) { it.toIntOrNull() ?: 0 }
 
     fun partOne() = compareWithGap(1)
     fun partTwo() = compareWithGap(3)
