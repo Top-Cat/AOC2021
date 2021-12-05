@@ -15,7 +15,7 @@ fun Int.inverse(size: Int) = ((1 shl size) - 1) - this
 
 class Main {
     private val input: List<Binary> = readInput(3) { str ->
-        str.trim().map { it.digitToInt() }
+        str.map { it.digitToInt() }
     }
 
     private val gamma = mostCommon(input)
