@@ -1,10 +1,7 @@
-package day5
-
-import readInput
-import toIntOrZero
+package at.topc.aoc2021
 
 fun main() {
-    Main().also {
+    Day5().also {
         println(it.partOne()) // 7414
         println(it.partTwo()) // 19676
     }
@@ -14,7 +11,7 @@ typealias LineSegment = Pair<Point, Point>
 typealias Point = Pair<Int, Int>
 operator fun Point.compareTo(other: Point) = if (first == other.first) second - other.second else first - other.first
 
-class Main {
+class Day5 {
     private val input: List<LineSegment> = readInput(5) { str ->
         str.split(" -> ").map { c ->
             c.split(",").map { n ->

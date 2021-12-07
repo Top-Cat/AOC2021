@@ -1,15 +1,13 @@
-package day1
-
-import readInput
+package at.topc.aoc2021
 
 fun main() {
-    Main().also {
+    Day1().also {
         println(it.partOne())
         println(it.partTwo())
     }
 }
 
-class Main {
+class Day1 {
     private val input = readInput(1) { it.toIntOrNull() ?: 0 }
 
     fun partOne() = compareWithGap(1)

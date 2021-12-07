@@ -1,9 +1,7 @@
-package day2
-
-import readInput
+package at.topc.aoc2021
 
 fun main() {
-    Main().also {
+    Day2().also {
         println(it.partOne()) // 1648020
         println(it.partTwo()) // 1759818555
     }
@@ -32,7 +30,7 @@ data class Position(val horizontal: Int = 0, val depth: Int = 0, val aim: Int = 
     operator fun plus(other: Position) = Position(horizontal + other.horizontal, depth + other.depth, aim + other.aim)
 }
 
-class Main {
+class Day2 {
     private val input = readInput(2) { str ->
         str.split(" ").let {
             Movement(Direction.valueOf(it[0].uppercase()), it[1].toIntOrNull() ?: 0)

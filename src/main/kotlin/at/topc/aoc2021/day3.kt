@@ -1,9 +1,7 @@
-package day3
-
-import readInput
+package at.topc.aoc2021
 
 fun main() {
-    Main().also {
+    Day3().also {
         println(it.partOne()) // 4191876
         println(it.partTwo()) // 3414905
     }
@@ -13,7 +11,7 @@ typealias Binary = List<Int>
 fun Binary.toNumber() = mapIndexed { idx, elem -> if (elem == 0) 0 else 1 shl (size - idx - 1) }.sumOf { it }
 fun Int.inverse(size: Int) = ((1 shl size) - 1) - this
 
-class Main {
+class Day3 {
     private val input: List<Binary> = readInput(3) { str ->
         str.map { it.digitToInt() }
     }

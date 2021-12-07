@@ -1,10 +1,7 @@
-package day4
-
-import readInput
-import toIntOrZero
+package at.topc.aoc2021
 
 fun main() {
-    Main().also {
+    Day4().also {
         println(it.partOne()) // 33348
         println(it.partTwo()) // 8112
     }
@@ -31,7 +28,7 @@ class BingoCard(private val numbers: List<List<Int>>) {
         pick.first().mapIndexed { idx, b -> pick.all { it[idx] } }.any() // Any column has all picked
 }
 
-class Main {
+class Day4 {
     private val input = readInput(4).split("\n\n")
     private val calls = input.first().split(",").map { it.toIntOrZero() }
     private val sheets: List<BingoCard> = input.drop(1).map {
