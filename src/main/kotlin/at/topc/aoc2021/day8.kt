@@ -26,23 +26,18 @@ class Display(private val segments: List<Segment> = (1..7).map { Segment() }) {
             6 -> listOf(0, 1, 5, 6) // 6, 9, 0
             // 7 -> 8
             else -> listOf()
+        }.filter { idx ->
+            segments[idx].handleClue(withoutSolved)
         }.forEach { idx ->
-            if (segments[idx].handleClue(withoutSolved)) {
-                onCompleted(segments[idx])
-            }
+            onCompleted(segments[idx])
         }
     }
 
-    private fun onCompleted(segment: Segment) {
-        segments.minus(segment).forEach {
-            if (!it.done()) {
-                it.remove(segment.char())
-                if (it.done()) {
-                    onCompleted(it)
-                }
-            }
+    private fun onCompleted(segment: Segment): Unit =
+        segments.minus(segment).filter { !it.done() }.forEach {
+            it.remove(segment.char())
+            if (it.done()) onCompleted(it)
         }
-    }
 
     fun done() = segments.all { it.done() }
 
@@ -66,19 +61,14 @@ class Display(private val segments: List<Segment> = (1..7).map { Segment() }) {
 class Segment(private val possible: MutableList<Char> = ('a'..'g').toMutableList()) {
     fun char() = if (possible.size == 1) possible[0] else 'z'
 
-    fun handleClue(it: String): Boolean {
-        if (!done()) {
+    fun handleClue(it: String) = !done() && run {
             possible.removeIf { c -> !it.contains(c) }
-            return done()
+            done()
         }
-        return false
-    }
 
     fun done() = possible.size <= 1
 
-    fun remove(solvedChars: Char) {
-        possible.remove(solvedChars)
-    }
+    fun remove(solvedChars: Char) = possible.remove(solvedChars)
 }
 
 @ExperimentalTime
@@ -102,9 +92,7 @@ class Day8 {
         }
 
     fun partTwo() = input.sumOf { line ->
-            // Handle unique numbers first
-            val display = Display()
-
+        Display().let { display ->
             while (!display.done()) {
                 line.first.forEach { c ->
                     display.handleClue(c)
@@ -115,4 +103,5 @@ class Day8 {
                 display.numberFor(it)
             }.joinToString("").toInt()
         }
+    }
 }
