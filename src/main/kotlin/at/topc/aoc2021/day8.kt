@@ -15,9 +15,7 @@ fun main() {
 typealias Line = Pair<List<String>, List<String>>
 class Display(private val segments: List<Segment> = (1..7).map { Segment() }) {
     fun handleClue(it: String) {
-        val solvedSegments = segments.partition { it.done() }
-        val solvedChars = solvedSegments.first.map { it.possible[0] }
-        solvedSegments.second.forEach { it.remove(solvedChars) }
+        val solvedChars = segments.filter { it.done() }.map { it.char() }
         val withoutSolved = it.filter { c -> !solvedChars.contains(c) }
 
         when (it.length) {
@@ -28,8 +26,21 @@ class Display(private val segments: List<Segment> = (1..7).map { Segment() }) {
             6 -> listOf(0, 1, 5, 6) // 6, 9, 0
             // 7 -> 8
             else -> listOf()
-        }.forEach {
-            idx -> segments[idx].handleClue(withoutSolved)
+        }.forEach { idx ->
+            if (segments[idx].handleClue(withoutSolved)) {
+                onCompleted(segments[idx])
+            }
+        }
+    }
+
+    private fun onCompleted(segment: Segment) {
+        segments.minus(segment).forEach {
+            if (!it.done()) {
+                it.remove(segment.char())
+                if (it.done()) {
+                    onCompleted(it)
+                }
+            }
         }
     }
 
@@ -49,18 +60,24 @@ class Display(private val segments: List<Segment> = (1..7).map { Segment() }) {
     )
 
     fun numberFor(it: String) = numberLookup[(1..7).map { idx ->
-            it.contains(segments[idx - 1].possible[0])
+            it.contains(segments[idx - 1].char())
         }] ?: -1
 }
-class Segment(val possible: MutableList<Char> = ('a'..'g').toMutableList()) {
-    fun handleClue(it: String) {
-        if (!done()) possible.removeIf { c -> !it.contains(c) }
+class Segment(private val possible: MutableList<Char> = ('a'..'g').toMutableList()) {
+    fun char() = if (possible.size == 1) possible[0] else 'z'
+
+    fun handleClue(it: String): Boolean {
+        if (!done()) {
+            possible.removeIf { c -> !it.contains(c) }
+            return done()
+        }
+        return false
     }
 
     fun done() = possible.size <= 1
 
-    fun remove(solvedChars: List<Char>) {
-        possible.removeIf { solvedChars.contains(it) }
+    fun remove(solvedChars: Char) {
+        possible.remove(solvedChars)
     }
 }
 
