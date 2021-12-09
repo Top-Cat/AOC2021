@@ -12,7 +12,7 @@ fun main() {
     }
 }
 
-typealias CaveFloor = List<List<Int>>
+typealias CaveFloor = List<List<Lowpoint>>
 data class Lowpoint(val x: Int, val y: Int, val height: Int)
 
 @ExperimentalTime
@@ -22,30 +22,22 @@ class Day9 {
             n.digitToIntOrNull() ?: 0
         }
     }
+    private val caveFloor = input.mapIndexed { y, row ->
+        row.mapIndexed { x, n ->
+            Lowpoint(x, y, n)
+        }
+    }
+    private val flattenedFloor = caveFloor.flatten()
 
-    private fun CaveFloor.safeGet(x: Int, y: Int) = this.getOrNull(y)?.getOrNull(x)?.let { Lowpoint(x, y, it) }
+    private fun CaveFloor.safeGet(x: Int, y: Int) = this.getOrNull(y)?.getOrNull(x)
     private fun Lowpoint.getNeighbours() = listOfNotNull(
-        input.safeGet(x, y - 1), // up
-        input.safeGet(x - 1, y), // left
-        input.safeGet(x + 1, y), // right
-        input.safeGet(x, y + 1) // down
+        caveFloor.safeGet(x, y - 1), // up
+        caveFloor.safeGet(x - 1, y), // left
+        caveFloor.safeGet(x + 1, y), // right
+        caveFloor.safeGet(x, y + 1) // down
     )
     private fun Lowpoint.isLowpoint() = getNeighbours().all { it.height > height }
     private fun Lowpoint.lowestNeighbour() = getNeighbours().minByOrNull { it.height } ?: this
-
-    fun partOne() =
-        input.flatMapIndexed { y, row ->
-            row.mapIndexedNotNull { x, n ->
-                Lowpoint(x, y, n).let {
-                    if (it.isLowpoint()) {
-                        it
-                    } else {
-                        null
-                    }
-                }
-            }
-        }.sumOf { it.height + 1 }
-
     private fun Lowpoint.flowsTo(): Lowpoint =
         lowestNeighbour().let { n ->
             if (n.height < height) {
@@ -55,16 +47,11 @@ class Day9 {
             }
         }
 
-    fun partTwo() = input
-        .flatMapIndexed { y, row ->
-            row.mapIndexedNotNull { x, n ->
-                if (n == 9) {
-                    null
-                } else {
-                    Lowpoint(x, y, n).flowsTo()
-                }
-            }
-        }
+    fun partOne() = flattenedFloor.filter { it.isLowpoint() }.sumOf { it.height + 1 }
+
+    fun partTwo() = flattenedFloor
+        .filter { it.height != 9 }
+        .map { it.flowsTo() }
         .groupBy { it }
         .mapValues { it.value.size }
         .toList()
