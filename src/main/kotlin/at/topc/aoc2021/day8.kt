@@ -14,19 +14,34 @@ fun main() {
 
 typealias Line = Pair<List<String>, List<String>>
 class Display(private val segments: List<Segment> = (1..7).map { Segment() }) {
+    private val numberLookup = mapOf(
+        listOf(true, true, true, false, true, true, true) to 0,
+        listOf(false, false, true, false, false, true, false) to 1,
+        listOf(true, false, true, true, true, false, true) to 2,
+        listOf(true, false, true, true, false, true, true) to 3,
+        listOf(false, true, true, true, false, true, false) to 4,
+        listOf(true, true, false, true, false, true, true) to 5,
+        listOf(true, true, false, true, true, true, true) to 6,
+        listOf(true, false, true, false, false, true, false) to 7,
+        listOf(true, true, true, true, true, true, true) to 8,
+        listOf(true, true, true, true, false, true, true) to 9
+    )
+
+    private val lookup = numberLookup.toList().groupBy {
+        it.first.count { b -> b }
+    }.map {
+        it.key to it.value.map { p ->
+            p.first.mapIndexedNotNull { idx, b ->
+                if (b) idx else null
+            }.toSet()
+        }.reduce { a, b -> a.intersect(b) }
+    }.filter { it.second.size < 7 }.toMap()
+
     fun handleClue(it: String) {
         val solvedChars = segments.filter { it.done() }.map { it.char() }
         val withoutSolved = it.filter { c -> !solvedChars.contains(c) }
 
-        when (it.length) {
-            2 -> listOf(2, 5) // 1
-            3 -> listOf(0, 2, 5) // 7
-            4 -> listOf(1, 2, 3, 5) // 4
-            5 -> listOf(0, 3, 6) // 2, 3, 5
-            6 -> listOf(0, 1, 5, 6) // 6, 9, 0
-            // 7 -> 8
-            else -> listOf()
-        }.filter { idx ->
+        (lookup[it.length] ?: listOf()).filter { idx ->
             segments[idx].handleClue(withoutSolved)
         }.forEach { idx ->
             onCompleted(segments[idx])
@@ -40,19 +55,6 @@ class Display(private val segments: List<Segment> = (1..7).map { Segment() }) {
         }
 
     fun done() = segments.all { it.done() }
-
-    private val numberLookup = mapOf(
-        listOf(true, true, true, false, true, true, true) to 0,
-        listOf(false, false, true, false, false, true, false) to 1,
-        listOf(true, false, true, true, true, false, true) to 2,
-        listOf(true, false, true, true, false, true, true) to 3,
-        listOf(false, true, true, true, false, true, false) to 4,
-        listOf(true, true, false, true, false, true, true) to 5,
-        listOf(true, true, false, true, true, true, true) to 6,
-        listOf(true, false, true, false, false, true, false) to 7,
-        listOf(true, true, true, true, true, true, true) to 8,
-        listOf(true, true, true, true, false, true, true) to 9
-    )
 
     fun numberFor(it: String) = numberLookup[(1..7).map { idx ->
             it.contains(segments[idx - 1].char())
