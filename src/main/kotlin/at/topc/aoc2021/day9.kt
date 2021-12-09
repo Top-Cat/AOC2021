@@ -50,14 +50,14 @@ class Day9 {
     fun partOne() = flattenedFloor.filter { it.isLowpoint() }.sumOf { it.height + 1 }
 
     fun partTwo() = flattenedFloor
-        .filter { it.height != 9 }
-        .map { it.flowsTo() }
-        .groupBy { it }
-        .mapValues { it.value.size }
-        .toList()
-        .sortedByDescending { it.second }
-        .take(3)
-        .fold(1) { prev, elem ->
+        .filter { it.height != 9 }         // Locations of height 9 do not count as being in any basin
+        .map { it.flowsTo() }              // Get where every point flows to
+        .groupBy { it }                    // Group by finishing location (we now have basins)
+        .mapValues { it.value.size }       // Get size of each basin
+        .toList()                          // Transform to list of pairs so we can sort
+        .sortedByDescending { it.second }  // Sort by basin size
+        .take(3)                        // Three largest basins
+        .fold(1) { prev, elem ->     // Multiply their sizes together
             prev * elem.second
         }
 }
