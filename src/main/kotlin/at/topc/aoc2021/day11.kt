@@ -2,9 +2,7 @@ package at.topc.aoc2021
 
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.time.ExperimentalTime
 
-@ExperimentalTime
 fun main() {
     Day11().also {
         printTime("Day 11") {
@@ -14,7 +12,6 @@ fun main() {
     }
 }
 
-@ExperimentalTime
 data class Octopus(val day11: Day11, val x: Int, val y: Int, val level: AtomicInteger, val hasFlashed: AtomicBoolean = AtomicBoolean(false)) {
     fun clear() = hasFlashed.getAndSet(false).also {
         if (level.get() > 9) {
@@ -48,7 +45,6 @@ data class Octopus(val day11: Day11, val x: Int, val y: Int, val level: AtomicIn
     }
 }
 
-@ExperimentalTime
 class Day11 {
     private val input = readInput(11) {
         it.map { c ->

@@ -1,8 +1,5 @@
 package at.topc.aoc2021
 
-import kotlin.time.ExperimentalTime
-
-@ExperimentalTime
 fun main() {
     Day8().also {
         printTime("Day 8") {
@@ -73,7 +70,6 @@ class Segment(private val possible: MutableList<Char> = ('a'..'g').toMutableList
     fun remove(solvedChars: Char) = possible.remove(solvedChars)
 }
 
-@ExperimentalTime
 class Day8 {
     private val input = readInput(8) {
         it.split(" | ").map { s ->

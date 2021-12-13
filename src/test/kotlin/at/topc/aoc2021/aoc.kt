@@ -2,9 +2,7 @@ package at.topc.aoc2021
 
 import org.junit.Test
 import kotlin.test.assertEquals
-import kotlin.time.ExperimentalTime
 
-@ExperimentalTime
 class AocTests {
 
     @Test

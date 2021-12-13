@@ -1,8 +1,5 @@
 package at.topc.aoc2021
 
-import kotlin.time.ExperimentalTime
-
-@ExperimentalTime
 fun main() {
     Day12().also {
         printTime("Day 12") {
@@ -12,7 +9,6 @@ fun main() {
     }
 }
 
-@ExperimentalTime
 class Day12 {
     private val input = readInput(12) {
         it.split("-").let { parts ->

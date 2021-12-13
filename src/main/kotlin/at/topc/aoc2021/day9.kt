@@ -1,8 +1,5 @@
 package at.topc.aoc2021
 
-import kotlin.time.ExperimentalTime
-
-@ExperimentalTime
 fun main() {
     Day9().also {
         printTime("Day 9") {
@@ -15,7 +12,6 @@ fun main() {
 typealias CaveFloor = List<List<Lowpoint>>
 data class Lowpoint(val x: Int, val y: Int, val height: Int)
 
-@ExperimentalTime
 class Day9 {
     private val input = readInput(9) {
         it.map { n ->

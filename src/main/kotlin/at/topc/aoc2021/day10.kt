@@ -1,8 +1,5 @@
 package at.topc.aoc2021
 
-import kotlin.time.ExperimentalTime
-
-@ExperimentalTime
 fun main() {
     Day10().also {
         printTime("Day 10") {
@@ -25,7 +22,6 @@ class CorruptLineException(msg: String, actualChar: Char) : Exception(msg) {
     }
 }
 
-@ExperimentalTime
 class Day10 {
     private val input = readInput(10) { it }
     private val validChars = mapOf(

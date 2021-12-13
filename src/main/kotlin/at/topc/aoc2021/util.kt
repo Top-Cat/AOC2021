@@ -1,7 +1,6 @@
 package at.topc.aoc2021
 
 import java.io.File
-import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
 fun getFile(day: Int) = File(Day1::class.java.getResource("/$day.txt")!!.toURI())
@@ -11,7 +10,6 @@ fun String.toIntOrZero() = this.toIntOrNull() ?: 0
 
 operator fun Pair<Int, Int>.plus(other: Pair<Int, Int>) = first + other.first to second + other.second
 
-@ExperimentalTime
 inline fun <T> printTime(title: String, block: () -> T): T {
     var result: T
     measureTime {

@@ -20,7 +20,10 @@ tasks.test {
     useJUnit()
 }
 
-tasks.withType<KotlinCompile>() {
+kotlin.sourceSets.all {
+    languageSettings.useExperimentalAnnotation("kotlin.time.ExperimentalTime")
+}
+
+tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
-    kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.time.ExperimentalTime"
 }

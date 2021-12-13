@@ -1,8 +1,5 @@
 package at.topc.aoc2021
 
-import kotlin.time.ExperimentalTime
-
-@ExperimentalTime
 fun main() {
     // Only part outside timer is reading the input
     Day6().also {
@@ -17,7 +14,6 @@ data class StateInfo(val map: Map<Int, Long> = mapOf(5 to 1), val counts: List<L
     fun next(map: Map<Int, Long>) = StateInfo(map, counts.plus(map.values.sum()))
 }
 
-@ExperimentalTime
 class Day6 {
     private val input = readInput(6).split(",").map { it.toIntOrZero() }
 
