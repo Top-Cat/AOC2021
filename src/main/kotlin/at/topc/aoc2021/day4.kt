@@ -25,7 +25,7 @@ class BingoCard(private val numbers: List<List<Int>>) {
 
     private fun hasWon(pick: List<List<Boolean>>) =
         pick.any { it.all { b -> b } } && // Any row has all picked
-        pick.first().mapIndexed { idx, b -> pick.all { it[idx] } }.any() // Any column has all picked
+        pick.first().mapIndexed { idx, _ -> pick.all { it[idx] } }.any() // Any column has all picked
 }
 
 class Day4 {
