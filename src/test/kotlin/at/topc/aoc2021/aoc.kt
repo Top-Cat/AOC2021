@@ -89,4 +89,10 @@ class AocTests {
             ⬛ ⬜ ⬜ ⬛ ⬜ ⬛ ⬛ ⬛ ⬛ ⬜ ⬜ ⬛ ⬛ ⬜ ⬜ ⬛ ⬜ ⬜ ⬛ ⬜ ⬛ ⬛ ⬛ ⬛ ⬜ ⬛ ⬜ ⬜ ⬛ ⬜ ⬛ ⬜ ⬜ ⬜ ⬜ ⬛ ⬜ ⬜ ⬛
         """.trimIndent(), Day13().partTwo())
     }
+
+    @Test
+    fun day14() {
+        assertEquals(2937, Day14().partOne())
+        assertEquals(3390034818249, Day14().partTwo())
+    }
 }
