@@ -95,4 +95,10 @@ class AocTests {
         assertEquals(2937, Day14().partOne())
         assertEquals(3390034818249, Day14().partTwo())
     }
+
+    @Test
+    fun day15() {
+        assertEquals(698, Day15().partOne())
+        assertEquals(3022, Day15().partTwo())
+    }
 }
