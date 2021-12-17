@@ -53,7 +53,7 @@ class Day11 {
     }
     val octopi = input.mapIndexed { y, row ->
         row.mapIndexed { x, n ->
-            Octopus(this, x, y, AtomicInteger(0))
+            Octopus(this, x, y, AtomicInteger(n))
         }
     }
     private val flattenedOctopi = octopi.flatten()
