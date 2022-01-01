@@ -1,5 +1,6 @@
 package at.topc.aoc2021
 
+import java.util.PriorityQueue
 import kotlin.math.abs
 
 fun main() {
@@ -31,35 +32,35 @@ abstract class Grid {
 }
 
 fun aStarSearch(start: Risk, finish: Risk, grid: Grid): Int {
-    val openVertices = mutableSetOf(start)
     val closedVertices = mutableSetOf<Risk>()
     val costFromStart = mutableMapOf(start to 0)
     val estimatedTotalCost = mutableMapOf(start to grid.heuristicDistance(start, finish))
 
-    while (
-        openVertices
-            .minByOrNull { estimatedTotalCost.getValue(it) }
-            ?.let { currentPos ->
-                // Check if we have reached the finish
-                if (currentPos == finish) {
-                    return estimatedTotalCost.getValue(finish)
+    val queue = PriorityQueue<Risk>(
+        compareBy { estimatedTotalCost[it] }
+    )
+    queue.add(start)
+
+    while (!queue.isEmpty()) {
+        queue.remove().let { currentPos ->
+            // Check if we have reached the finish
+            if (currentPos == finish) {
+                return estimatedTotalCost.getValue(finish)
+            }
+
+            // Mark the current vertex as closed
+            closedVertices.add(currentPos)
+
+            grid.getNeighbours(currentPos)
+                .filter { !closedVertices.contains(it) }
+                .map { neighbour -> neighbour to costFromStart.getValue(currentPos) + grid.moveCost(currentPos, neighbour) }
+                .filter { (neighbour, score) -> score < costFromStart.getOrDefault(neighbour, MAX_SCORE) }
+                .forEach { (neighbour, score) ->
+                    costFromStart[neighbour] = score
+                    estimatedTotalCost[neighbour] = score + grid.heuristicDistance(neighbour, finish)
+                    queue.add(neighbour)
                 }
-
-                // Mark the current vertex as closed
-                openVertices.remove(currentPos)
-                closedVertices.add(currentPos)
-
-                grid.getNeighbours(currentPos)
-                    .minus(closedVertices)
-                    .map { neighbour -> neighbour to costFromStart.getValue(currentPos) + grid.moveCost(currentPos, neighbour) }
-                    .filter { (neighbour, score) -> score < costFromStart.getOrDefault(neighbour, MAX_SCORE) }
-                    .forEach { (neighbour, score) ->
-                        openVertices.add(neighbour)
-                        costFromStart[neighbour] = score
-                        estimatedTotalCost[neighbour] = score + grid.heuristicDistance(neighbour, finish)
-                    }
-            } != null) {
-        // :)
+        }
     }
 
     throw IllegalArgumentException("No Path from Start $start to Finish $finish")
